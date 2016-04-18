@@ -101,7 +101,9 @@ class DateComboDefaultWidget extends DateTimeWidgetBase implements ContainerFact
       '#date_time_format' => $time_format,
       '#date_time_element' => $time_type,
       '#date_time_callbacks' => array(),
+
     );
+    $element['value2']['#required'] = $this->fieldDefinition->getSetting('require_enddate');
 
     if ($items[$delta]->date2) {
       $date = $items[$delta]->date2;
@@ -130,30 +132,32 @@ class DateComboDefaultWidget extends DateTimeWidgetBase implements ContainerFact
     // DrupalDateTime object at this point. We need to convert it back to the
     // storage timezone and format.
     foreach ($values as &$item) {
-      if (!empty($item['value']) && !empty($item['value2']) && $item['value'] instanceof DrupalDateTime && $item['value2'] instanceof DrupalDateTime) {
-        $date = $item['value'];
-        $date2 = $item['value2'];
-        switch ($this->getFieldSetting('datetime_type')) {
-          case DateTimeItem::DATETIME_TYPE_DATE:
-            // If this is a date-only field, set it to the default time so the
-            // timezone conversion can be reversed.
-            datetime_date_default_time($date);
-            datetime_date_default_time($date2);
-            $format = DATETIME_DATE_STORAGE_FORMAT;
-            break;
-
-          default:
-            $format = DATETIME_DATETIME_STORAGE_FORMAT;
-            break;
-        }
-        // Adjust the date for storage.
-        $date->setTimezone(new \DateTimezone(DATETIME_STORAGE_TIMEZONE));
-        $date2->setTimezone(new \DateTimezone(DATETIME_STORAGE_TIMEZONE));
-        $item['value'] = $date->format($format);
-        $item['value2'] = $date2->format($format);
+      if (isset($item['value']) && $item['value'] instanceof DrupalDateTime) {
+        $item['value'] = $this->massageDateValue($item['value']);
+      }
+      if (isset($item['value2']) && $item['value2'] instanceof DrupalDateTime) {
+        $item['value2'] = $this->massageDateValue($item['value2']);
       }
     }
     return $values;
+  }
+
+  protected function massageDateValue(DrupalDateTime $date) {
+    switch ($this->getFieldSetting('datetime_type')) {
+      case DateTimeItem::DATETIME_TYPE_DATE:
+        // If this is a date-only field, set it to the default time so the
+        // timezone conversion can be reversed.
+        datetime_date_default_time($date);
+        $format = DATETIME_DATE_STORAGE_FORMAT;
+        break;
+
+      default:
+        $format = DATETIME_DATETIME_STORAGE_FORMAT;
+        break;
+    }
+    // Adjust the date for storage.
+    $date->setTimezone(new \DateTimezone(DATETIME_STORAGE_TIMEZONE));
+    return $date->format($format);
   }
 
 }
