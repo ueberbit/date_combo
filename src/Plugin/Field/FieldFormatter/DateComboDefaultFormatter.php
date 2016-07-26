@@ -17,7 +17,7 @@ use Drupal\datetime\Plugin\Field\FieldFormatter\DateTimeFormatterBase;
  *
  * @FieldFormatter(
  *   id = "date_combo_default",
- *   label = @Translation("Default"),
+ *   label = @Translation("Date Combo: Default"),
  *   field_types = {
  *     "date_combo"
  *   }

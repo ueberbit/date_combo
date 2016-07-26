@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * Implements hook_field_formatter_info_alter().
+ *
+ * @param array $info
+ */
+function date_combo_field_formatter_info_alter(array &$info) {
+  foreach ($info as &$formatter) {
+    if (in_array('datetime', $formatter['field_types'])) {
+      $formatter['field_types'][] = 'date_combo';
+    }
+  }
+}

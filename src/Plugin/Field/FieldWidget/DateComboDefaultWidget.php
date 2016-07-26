@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @FieldWidget(
  *   id = "date_combo_default",
- *   label = @Translation("Date and time"),
+ *   label = @Translation("Date Combo: Date and time"),
  *   field_types = {
  *     "date_combo"
  *   }
