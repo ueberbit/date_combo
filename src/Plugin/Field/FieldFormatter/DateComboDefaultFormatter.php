@@ -84,7 +84,7 @@ class DateComboDefaultFormatter extends DateTimeFormatterBase {
           ],
         ],
         '#theme' => 'time',
-        '#text' => $output . ' to ' . $output2,
+        '#text' => $this->t('@start_date to @end_date', ['@start_date' => $output, '@end_date' => $output2]),
         '#html' => FALSE,
         '#attributes' => array(
           'datetime' => $iso_date,
@@ -144,7 +144,7 @@ class DateComboDefaultFormatter extends DateTimeFormatterBase {
     $summary = parent::settingsSummary();
 
     $date = new DrupalDateTime();
-    $summary[] = t('Format: @display', array('@display' => $this->formatDate($date, $this->getFormatSettings())));
+    $summary[] = t('Format: @display', array('@display' => $this->formatDate($date)));
 
     return $summary;
   }
