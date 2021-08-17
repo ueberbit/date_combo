@@ -54,7 +54,7 @@ class DateComboDefaultFormatter extends DateTimeFormatterBase {
 
         if ($this->getFieldSetting('datetime_type') == 'date') {
           // A date without time will pick up the current time, use the default.
-          datetime_date_default_time($date);
+          $date->setDefaultDateTime();
         }
         $this->setTimeZone($date);
 
@@ -69,7 +69,7 @@ class DateComboDefaultFormatter extends DateTimeFormatterBase {
 
         if ($this->getFieldSetting('datetime_type') == 'date') {
           // A date without time will pick up the current time, use the default.
-          datetime_date_default_time($date);
+          $date->setDefaultDateTime();
         }
         $this->setTimeZone($date);
 

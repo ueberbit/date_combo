@@ -1,7 +1,7 @@
-name: Date Combo 
+name: Date Combo
 package: Date
 description: 'Field for start and end date.'
-core: 8.x
+core_version_requirement: ^8.8 || ^9
 dependencies:
   - datetime
 type: module

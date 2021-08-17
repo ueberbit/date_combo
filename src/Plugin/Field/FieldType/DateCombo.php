@@ -12,6 +12,8 @@ use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Field\FieldItemBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\TypedData\DataDefinition;
+use Drupal\Core\TypedData\TraversableTypedDataInterface;
+use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 
 /**
   *  * Defines the 'datecombo' entity field type.
@@ -113,9 +115,9 @@ class DateCombo extends FieldItemBase {
 
     // Just pick a date in the past year. No guidance is provided by this Field
     // type.
-    $timestamp = REQUEST_TIME - mt_rand(0, 86400*365);
-    $values['value'] = gmdate(DATETIME_DATETIME_STORAGE_FORMAT, $timestamp);
-    $values['value2'] = gmdate(DATETIME_DATETIME_STORAGE_FORMAT, $timestamp + 3600);
+    $timestamp = \Drupal::time()->getRequestTime() - mt_rand(0, 86400*365);
+    $values['value'] = gmdate(DateTimeItemInterface::DATETIME_STORAGE_FORMAT, $timestamp);
+    $values['value2'] = gmdate(DateTimeItemInterface::DATETIME_STORAGE_FORMAT, $timestamp + 3600);
     return $values;
   }
 

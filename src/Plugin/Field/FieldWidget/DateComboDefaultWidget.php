@@ -13,6 +13,7 @@ use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItem;
+use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\datetime\Plugin\Field\FieldWidget\DateTimeWidgetBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -55,7 +56,7 @@ class DateComboDefaultWidget extends DateTimeWidgetBase implements ContainerFact
       $configuration['field_definition'],
       $configuration['settings'],
       $configuration['third_party_settings'],
-      $container->get('entity.manager')->getStorage('date_format')
+      $container->get('entity_type.manager')->getStorage('date_format')
     );
   }
 
@@ -107,13 +108,14 @@ class DateComboDefaultWidget extends DateTimeWidgetBase implements ContainerFact
     $element['value2']['#required'] = $this->fieldDefinition->getSetting('require_enddate');
 
     if ($items[$delta]->date2) {
+      /** @var \Drupal\Component\Datetime\DateTimePlus $date */
       $date = $items[$delta]->date2;
       // The date was created and verified during field_load(), so it is safe to
       // use without further inspection.
       if ($this->getFieldSetting('datetime_type') == DateTimeItem::DATETIME_TYPE_DATE) {
         // A date without time will pick up the current time, use the default
         // time.
-        datetime_date_default_time($date);
+        $date->setDefaultDateTime();
       }
       $date->setTimezone(new \DateTimeZone($element['value2']['#date_timezone']));
       $element['value2']['#default_value'] = $date;
@@ -148,16 +150,16 @@ class DateComboDefaultWidget extends DateTimeWidgetBase implements ContainerFact
       case DateTimeItem::DATETIME_TYPE_DATE:
         // If this is a date-only field, set it to the default time so the
         // timezone conversion can be reversed.
-        datetime_date_default_time($date);
-        $format = DATETIME_DATE_STORAGE_FORMAT;
+        $date->setDefaultDateTime();
+        $format = DateTimeItemInterface::DATE_STORAGE_FORMAT;
         break;
 
       default:
-        $format = DATETIME_DATETIME_STORAGE_FORMAT;
+        $format = DateTimeItemInterface::DATETIME_STORAGE_FORMAT;
         break;
     }
     // Adjust the date for storage.
-    $date->setTimezone(new \DateTimezone(DATETIME_STORAGE_TIMEZONE));
+    $date->setTimezone(new \DateTimezone(DateTimeItemInterface::STORAGE_TIMEZONE));
     return $date->format($format);
   }
 

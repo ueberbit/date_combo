@@ -12,6 +12,7 @@ use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemList;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 
 /**
  * Represents a configurable entity datetime field.
@@ -105,10 +106,10 @@ class DateComboFieldItemList extends FieldItemList {
     if (isset($default_value[0]['default_date_type'])) {
       // A default value should be in the format and timezone used for date
       // storage.
-      $date = new DrupalDateTime($default_value[0]['default_date'], DATETIME_STORAGE_TIMEZONE);
-      $value = $date->format(DATETIME_DATETIME_STORAGE_FORMAT);
-      $date2 = new DrupalDateTime($value . ' ' . $default_value[0]['default_date2'], DATETIME_STORAGE_TIMEZONE);
-      $value2 = $date2->format(DATETIME_DATETIME_STORAGE_FORMAT);
+      $date = new DrupalDateTime($default_value[0]['default_date'], DateTimeItemInterface::STORAGE_TIMEZONE);
+      $value = $date->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT);
+      $date2 = new DrupalDateTime($value . ' ' . $default_value[0]['default_date2'], DateTimeItemInterface::STORAGE_TIMEZONE);
+      $value2 = $date2->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT);
       // We only provide a default value for the first item, as do all fields.
       // Otherwise, there is no way to clear out unwanted values on multiple value
       // fields.
