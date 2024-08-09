@@ -6,7 +6,7 @@ use Drupal\field\FieldStorageConfigInterface;
  * Implements hook_field_views_data().
  */
 function date_combo_field_views_data(FieldStorageConfigInterface $field_storage) {
-  module_load_include('inc', 'datetime', 'datetime.views');
+  \Drupal::moduleHandler()->loadInclude('datetime', 'inc', 'datetime.views');
   $data = datetime_field_views_data($field_storage);
   foreach ($data as $table_name => $table_data) {
     // Set the 'datetime' filter type.

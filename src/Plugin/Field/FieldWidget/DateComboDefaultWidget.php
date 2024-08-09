@@ -67,20 +67,25 @@ class DateComboDefaultWidget extends DateTimeWidgetBase implements ContainerFact
     $element = parent::formElement($items, $delta, $element, $form, $form_state);
     $element['#element_validate'][] = [$this, 'validateStartEnd'];
 
+    /** @var \Drupal\Core\Datetime\DateFormatInterface $html_date */
+    $html_date = $this->dateStorage->load('html_date');
+    /** @var \Drupal\Core\Datetime\DateFormatInterface $html_time */
+    $html_time = $this->dateStorage->load('html_time');
+
     // Identify the type of date and time elements to use.
     switch ($this->getFieldSetting('datetime_type')) {
       case DateTimeItem::DATETIME_TYPE_DATE:
         $date_type = 'date';
         $time_type = 'none';
-        $date_format = $this->dateStorage->load('html_date')->getPattern();
+        $date_format = $html_date->getPattern();
         $time_format = '';
         break;
 
       default:
         $date_type = 'date';
         $time_type = 'time';
-        $date_format = $this->dateStorage->load('html_date')->getPattern();
-        $time_format = $this->dateStorage->load('html_time')->getPattern();
+        $date_format = $html_date->getPattern();
+        $time_format = $html_time->getPattern();
         break;
     }
     $element['value2'] = $element['value'];

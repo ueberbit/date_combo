@@ -70,6 +70,8 @@ class DateComboFieldItemList extends FieldItemList {
 
       return $element;
     }
+
+    return array();
   }
 
   /**
